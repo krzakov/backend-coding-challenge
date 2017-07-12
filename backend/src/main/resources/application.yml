@@ -16,4 +16,8 @@ spring:
 flyway:
   schemas: kristoff_engage
 
+taxes:
+  vat:
+    uk: 0.20
+
 

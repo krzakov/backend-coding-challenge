@@ -1,16 +1,17 @@
 package com.engagetech;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ExpensesApplicationTests {
 
-	@Test
-	public void contextLoads() {
-	}
-
+//	@Autowired
+//	private ExpenseRepository expenseRepository;
+//
+//	@Autowired
+//	private ExpenseController expenseController;
+//
+//	@Test
+//	public void contextLoads() {
+//		assertThat(expenseController).isNotNull();
+//	}
 }
