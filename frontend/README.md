@@ -112,3 +112,67 @@ Feel free to comment your code, or put explanations in a pull request within the
 
 ##### Why doesn’t the test include X?
 Good question. Feel free to tell us how to make the test better. Or, you know, fork it and improve it!
+
+
+Quick Start - How to
+====
+```
+$ cd backend
+$ mvn package       # build app, run tests, prepare uber-jar 
+$ cd target
+$ java -jar expenses-0.0.1-SNAPSHOT.jar     #runs webapp on embedded tomcat
+#open browser of your choice and navigate to localhost:8080
+```
+
+Just like that, application is ready to use! 
+Database is hosted on my private server.
+
+**Building frontend:**
+
+If for some magical reason, you need to edit the content of the frontend application:
+```
+$ cd frontend
+$ gulp dev           # builds frontend angular.js application
+```
+
+Thanks to the courtesy of _gulp_, static content will be automatically placed into the backend application.
+
+Details about the structure
+--------------
+Source code has been divided into two separate packages:
+ * `/frontend` - including frontend angular.js application 
+ * `/backend` - containing backend spring-boot application
+
+**Frontend** 
+
+Viewing user interface does not require any application server nor fancy tools.
+Simply open prebuilt `frontend/static/index.html` file in order to view UI.
+
+**Backend** 
+
+Application can be built with _maven_ (used version 3.5.0);
+
+```
+$ mvn package
+```
+
+Maven will compile the project, execute unit and acceptance tests, build a jar file which could be ran using plain java without any additional tools. Maven will use embedded in-memory _h2_ database to supply data for tests.
+ 
+```
+$ java -jar expenses-0.0.1-SNAPSHOT.jar
+```
+
+Right after _maven_ will finish its work, you can find a built jar file in `backend/target/`. "Uber" jar will connect to the mysql database hosted on `mysql9.hekko.net.pl`, run migration scripts with _Flyway_, validate the schema and run embedded web application server.
+
+*"Make JAR not WAR!"* - heard that on one of the conferences
+
+If you really need, Web Archive File could be created instead of jar. Simply change packaging within _pom.xml_ file -> `<packaging>war</packaging>` 
+
+Core Technologies used
+--------------
+Frameworks and libraries used by **backend** application include:
+* Spring Boot 1.5.4
+* Flyway 4.0
+* ModelMapper 1.1.0
+* H2 database 1.4.196
+* Lombok

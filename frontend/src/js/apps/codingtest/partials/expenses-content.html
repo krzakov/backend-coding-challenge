@@ -9,15 +9,23 @@
 		<ul>
 			<li>
 				<label>Date</label>
-				<input type="text" ng-required="true" ng-model="newExpense.date" ui-date="dateOptions" placeholder="dd/mm/yyyy" />
+				<input type="text" ng-required="true" ng-model="newExpense.date" ui-date="dateOptions" placeholder="dd/mm/yyyy"
+					   pattern="(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d" title="year range 1900-2099"/>
 			</li>
 			<li>
 				<label>Amount</label>
-				<input type="text" ng-required="true" ng-model="newExpense.amount" placeholder="00.00" />
+				<input type="text" ng-required="true" ng-model="newExpense.amount" ng-change="recalculateVat()"  pattern="[0-9]{1,6}([.][0-9]{1,2})?" title="max 999999.99" placeholder="00.00" />
+				<select data-ng-model="selectedCurrencyCode" name="selectedCurrencyCode">
+					<option data-ng-repeat="code in currencyOptions.currenciesCodes" data-ng-value="code">{{code}}</option>
+				</select>
+			</li>
+			<li>
+				<label>VAT</label>
+				<input type="text" readonly ng-model="vat" placeholder="00.00" />
 			</li>
 			<li>
 				<label>Reason</label>
-					<textarea at-auto-resize ng-required="true" ng-model="newExpense.reason" ng-trim="false" placeholder="why oh why?"></textarea>
+				<textarea at-auto-resize ng-required="true" ng-model="newExpense.reason" ng-trim="false" placeholder="why oh why"></textarea>
 			</li>
 			<li>
 				<label></label>
@@ -34,8 +42,8 @@
 			<div class="col-2 figures">VAT</div>
 			<div class="col-15">Reason</div>
 		</div>
-		<div ng-repeat="expense in expenses" class="body-row">
-			<div class="col-4">{{expense.date | date:'dd MMM yyyy'}}</div>
+		<div ng-repeat="expense in expenses | orderBy:'-date'" class="body-row">
+			<div class="col-4">{{expense.date}}</div>
 			<div class="col-4 figures">{{expense.amount | currency:"&pound;"}}</div>
 			<div class="col-2 figures">{{expense.vat | currency:"&pound;"}}</div>
 			<div class="col-15">{{expense.reason}}</div>

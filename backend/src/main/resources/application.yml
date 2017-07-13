@@ -12,6 +12,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
+        default_schema: ${flyway.schemas}
+
+  profiles:
+    active: dev
 
 flyway:
   schemas: kristoff_engage
@@ -19,5 +23,8 @@ flyway:
 taxes:
   vat:
     uk: 0.20
+
+logging:
+  level: debug
 
 
