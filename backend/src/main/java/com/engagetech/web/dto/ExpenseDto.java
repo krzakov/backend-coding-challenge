@@ -30,7 +30,7 @@ public class ExpenseDto {
     private LocalDate date;
 
     @NotNull
-    @Size(max = 1000)
+    @Size(max = 500)
     private String reason;
 
     private BigDecimal vat;
