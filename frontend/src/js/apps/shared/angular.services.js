@@ -7,6 +7,7 @@ Angular Services for use in common apps
 ******************************************************************************************/
 
 require("./services/restalchemy.js");
+require("./services/exchangeRates.js");
 require("./services/notifications.js");
 require("./services/overlay.js");
 require("./services/confirmations.js");
@@ -16,6 +17,7 @@ require("./services/configuration.js");
 
 var app = angular.module("alchemytec.services", [
 	"alchemytec.restalchemy",
+	"alchemytec.exchangeRates",
 	"alchemytec.notifications",
 	"alchemytec.overlay",
 	"alchemytec.confirmations",

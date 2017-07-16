@@ -42,7 +42,7 @@
 			<div class="col-2 figures">VAT</div>
 			<div class="col-15">Reason</div>
 		</div>
-		<div ng-repeat="expense in expenses | orderBy:'-date'" class="body-row">
+		<div ng-repeat="expense in expenses | orderBy:'entityId'" class="body-row">
 			<div class="col-4">{{expense.date}}</div>
 			<div class="col-4 figures">{{expense.amount | currency:"&pound;"}}</div>
 			<div class="col-2 figures">{{expense.vat | currency:"&pound;"}}</div>

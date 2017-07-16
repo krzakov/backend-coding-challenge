@@ -8,7 +8,7 @@ Expenses controller
 
 var app = angular.module("expenses.controller", []);
 
-app.controller("ctrlExpenses", ["$rootScope", "$scope", "config", "restalchemy", "$http", "notifications", function ExpensesCtrl($rootScope, $scope, $config, $restalchemy, $http, $notifications) {
+app.controller("ctrlExpenses", ["$rootScope", "$scope", "config", "restalchemy", "notifications", "exchangeRates", function ExpensesCtrl($rootScope, $scope, $config, $restalchemy, $notifications, $exchangeRates) {
 	// Update the headings
 	$rootScope.mainTitle = "Expenses";
 	$rootScope.mainHeading = "Expenses";
@@ -21,7 +21,6 @@ app.controller("ctrlExpenses", ["$rootScope", "$scope", "config", "restalchemy",
 	var vatRate = 0.20;
 
 	$scope.currencyOptions = {
-	    currencyServiceUrl: "//api.fixer.io/latest",
         currenciesCodes : ["EUR","GBP"],
         defaultCurrencyCode : "GBP"
 	};
@@ -40,6 +39,16 @@ app.controller("ctrlExpenses", ["$rootScope", "$scope", "config", "restalchemy",
 			$scope.expenses = expenses;
 		}).error(function () {
             $notifications.show("Connection error", "Expenses cannot be loaded", "error", 5000);
+        });
+	};
+
+	var loadExchangeRates = function (baseCurrencyCode, resultCurrencyCode){
+		// Obtain exchange rate for given currencies
+		$exchangeRates.getExchangeRates(baseCurrencyCode, resultCurrencyCode)
+			.success(function (response) {
+                $scope.baseToGbp = JSON.stringify(response['rates'][resultCurrencyCode]);
+			}).error(function () {
+            $notifications.show("Connection issue", "A problem occurred reading currency data from the 3rd party server ", "error", 5000);
         });
 	};
 
@@ -65,8 +74,8 @@ app.controller("ctrlExpenses", ["$rootScope", "$scope", "config", "restalchemy",
                 $notifications.show("SUCCESS", "expense has been saved", "ok", 3000);
                 $scope.clearExpense();
 				loadExpenses();
-			}).error(function () {
-                $notifications.show("ERROR", "problem occured during saving Expense ", "error", 3000);
+			}).error(function (response) {
+                $notifications.show("ERROR", "problem occured during saving expense: " + JSON.stringify(response['error']), "error", 3000);
             });
 		}
 	};
@@ -75,19 +84,6 @@ app.controller("ctrlExpenses", ["$rootScope", "$scope", "config", "restalchemy",
 		$scope.newExpense = {};
 		$scope.vat = null;
 	};
-
-    $scope.getExchangeRates = function (base) {
-        $http({
-            url: $scope.currencyOptions.currencyServiceUrl,
-            method: "GET",
-            data: [],
-            params: {base: base, symbols: $scope.currencyOptions.defaultCurrencyCode}
-        }).success(function (response) {
-            $scope.baseToGbp = JSON.stringify(response['rates'][$scope.currencyOptions.defaultCurrencyCode]);
-        }).error(function () {
-            $notifications.show("Connection issue", "A problem occurred reading currency data from the 3rd party server ", "error", 5000);
-        });
-    };
 
     $scope.recalculateVat = function () {
         var input = $scope.newExpense.amount;
@@ -102,6 +98,6 @@ app.controller("ctrlExpenses", ["$rootScope", "$scope", "config", "restalchemy",
 
 	// Initialise scope variables
 	loadExpenses();
+	loadExchangeRates("EUR", $scope.currencyOptions.defaultCurrencyCode);
 	$scope.clearExpense();
-	$scope.getExchangeRates("EUR");
 }]);
